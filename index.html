@@ -1,1 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Năm Mới 2026</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000; /* Nền đen để pháo hoa nổi bật */
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .card {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 20px #ffd700;
+            backdrop-filter: blur(5px);
+            max-width: 80%;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            background: linear-gradient(to right, #ffd700, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        p {
+            font-size: 1.5rem;
+            color: #f0f0f0;
+            margin-top: 20px;
+        }
+
+        .wishes {
+            font-style: italic;
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsive cho điện thoại */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fireworks"></canvas>
+
+    <div class="card">
+        <h1>HAPPY NEW YEAR 2026</h1>
+        <p>Chúc mừng năm mới!</p>
+        <p class="wishes">"Vạn sự như ý - Tỷ sự như mơ <br> Triệu triệu bất ngờ - Không chờ cũng đến"</p>
+        <p style="font-size: 0.9rem; color: #ffd700;">— Từ [Tên của Bạn] —</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        class Firework {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.sx = Math.random() * 3 - 1.5;
+                this.sy = Math.random() * -3 - 3;
+                this.size = Math.random() * 2 + 1;
+                this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                this.exploded = false;
+                this.particles = [];
+            }
+
+            update() {
+                if (!this.exploded) {
+                    this.x += this.sx;
+                    this.y += this.sy;
+                    this.sy += 0.05;
+                    if (this.sy >= -1) this.explode();
+                } else {
+                    this.particles.forEach((p, i) => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy += 0.05;
+                        p.alpha -= 0.01;
+                        if (p.alpha <= 0) this.particles.splice(i, 1);
+                    });
+                }
+            }
+
+            explode() {
+                this.exploded = true;
+                for (let i = 0; i < 50; i++) {
+                    this.particles.push({
+                        x: this.x,
+                        y: this.y,
+                        vx: Math.random() * 6 - 3,
+                        vy: Math.random() * 6 - 3,
+                        alpha: 1
+                    });
+                }
+            }
+
+            draw() {
+                if (!this.exploded) {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    this.particles.forEach(p => {
+                        ctx.fillStyle = `rgba(${this.hexToRgb(this.color)}, ${p.alpha})`;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                }
+            }
+
+            hexToRgb(hsl) {
+                // Đơn giản hóa để lấy màu cho hạt pháo
+                return "255, 215, 0"; 
+            }
+        }
+
+        let fireworks = [];
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            if (Math.random() < 0.05) fireworks.push(new Firework());
+            
+            fireworks.forEach((fw, i) => {
+                fw.update();
+                fw.draw();
+                if (fw.exploded && fw.particles.length === 0) fireworks.splice(i, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
