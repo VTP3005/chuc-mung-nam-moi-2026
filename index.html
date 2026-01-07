@@ -3,140 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chúc Mừng Năm Mới 2026</title>
+    <title>Chúc Mừng Năm Mới 2026 - Rực Rỡ</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: #000; /* Nền đen để pháo hoa nổi bật */
+            background: radial-gradient(circle, #1a0033 0%, #000000 100%);
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Sử dụng min-height để tránh lỗi trên mobile */
-            flex-direction: column;
+            min-height: 100vh;
         }
 
         canvas {
             position: absolute;
             top: 0;
             left: 0;
+            pointer-events: none;
         }
 
+        /* Khung thiệp với viền Neon đổi màu */
         .card {
             position: relative;
             z-index: 10;
             text-align: center;
             color: #fff;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid #ffd700;
-            box-shadow: 0 0 20px #ffd700;
-            backdrop-filter: blur(5px);
-            max-width: 80%;
-            /* Thêm margin để không bị sát viền trên mobile khi xoay ngang */
-            margin: 20px;
-            animation: fadeIn 2s ease-in-out;
+            background: rgba(20, 0, 40, 0.7);
+            padding: 40px;
+            border-radius: 30px;
+            border: 3px solid #ff00ff;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            animation: neonBorder 5s linear infinite;
         }
-        
-        /* CSS cho ảnh đại diện */
+
+        @keyframes neonBorder {
+            0% { border-color: #ff00ff; box-shadow: 0 0 30px #ff00ff; }
+            33% { border-color: #00ffff; box-shadow: 0 0 30px #00ffff; }
+            66% { border-color: #ffff00; box-shadow: 0 0 30px #ffff00; }
+            100% { border-color: #ff00ff; box-shadow: 0 0 30px #ff00ff; }
+        }
+
         .recipient-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%; /* Bo tròn ảnh */
-            object-fit: cover; /* Đảm bảo ảnh không bị méo */
-            border: 3px solid #ffd700; /* Viền vàng */
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-            margin-bottom: 15px;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 0 20px #fff;
+            margin-bottom: 20px;
+            transition: transform 0.5s;
         }
+        .recipient-img:hover { transform: rotate(10deg) scale(1.1); }
 
         h1 {
-            font-size: 2.5rem; /* Giảm một chút cho cân đối với ảnh */
+            font-size: 2.8rem;
             margin: 0;
-            background: linear-gradient(to right, #ffd700, #fff, #ffd700);
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: rainbowText 8s linear infinite;
         }
 
-        p {
-            font-size: 1.3rem;
-            color: #f0f0f0;
-            margin-top: 15px;
+        @keyframes rainbowText {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
 
         .wishes {
-            font-style: italic;
-            color: #ff4d4d;
+            font-size: 1.4rem;
+            color: #fff;
+            text-shadow: 0 0 10px #ff00ff;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        .sender {
             font-weight: bold;
+            letter-spacing: 2px;
+            color: #ffd700;
+            text-transform: uppercase;
         }
-        
+
         .music-hint {
-            position: relative;
-            z-index: 10;
-            color: #888;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes blink {
-            50% { opacity: 0.5; }
-        }
-
-        /* Responsive cho điện thoại */
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            p { font-size: 1rem; }
-            .recipient-img { width: 100px; height: 100px; }
+            position: fixed;
+            bottom: 20px;
+            color: #00ffff;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            z-index: 100;
         }
     </style>
 </head>
 <body>
 
-    <canvas id="fireworks"></canvas>
-    
+    <canvas id="canvas"></canvas>
+
     <audio id="bgMusic" loop hidden>
         <source src="MỘT NĂM MỚI BÌNH AN x CHINA J - MinhAk Remix  Nhạc tết remix - MinhAK Official.mp3" type="audio/mpeg">
-        Trình duyệt của bạn không hỗ trợ phát nhạc.
     </audio>
 
     <div class="card">
         <img src="ntkn.jpg" alt="Người nhận" class="recipient-img">
-        
-        <h1>HAPPY NEW YEAR 2026</h1>
-        <p>Chúc mừng năm mới đại ca của O79!</p>
-        <p class="wishes">"Vạn sự như ý - Tỷ sự như mơ <br> Triệu triệu bất ngờ - Không chờ cũng đến"</p>
-        <p style="font-size: 0.9rem; color: #ffd700;">— Từ Võ Tấn Phát dz s1tg —</p>
+        <h1>Chúc mừng năm mới đại cả của O79!</h1>
+        <p style="font-size: 1.5rem; margin-top: 10px;">HAPPY NEW YEAR 2026</p>
+        <p class="wishes">
+            🌸 Chúc anh năm mới 🌸<br>
+            Tâm hồn luôn rạng rỡ <br>
+            Túi tiền luôn nặng đô <br>
+            Vạn sự đều như ý!
+        </p>
+        <p class="sender">— Từ Võ Tấn Phát dz s1tg —</p>
     </div>
-    
-    <p class="music-hint">(Chạm bất kỳ đâu trên màn hình để phát nhạc 🎵)</p>
+
+    <div class="music-hint">Chạm để nhận lời chúc & phát nhạc 🎵</div>
 
     <script>
-        // ---- Phần Javascript xử lý phát nhạc ----
-        document.addEventListener('click', function() {
-            const audio = document.getElementById('bgMusic');
-            // Kiểm tra nếu nhạc chưa phát thì mới phát
-            if (audio.paused) {
-                audio.play().then(() => {
-                    // Ẩn dòng gợi ý sau khi nhạc đã phát
-                    document.querySelector('.music-hint').style.display = 'none';
-                }).catch(error => {
-                    console.log("Không thể tự động phát nhạc: " + error);
-                });
-            }
-        }, { once: true }); // Chỉ chạy sự kiện click này 1 lần duy nhất
-
-
-        // ---- Phần Javascript xử lý pháo hoa (Giữ nguyên) ----
-        const canvas = document.getElementById('fireworks');
+        const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
+        let fireworks = [];
+        let particles = [];
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -146,77 +137,70 @@
             canvas.height = window.innerHeight;
         });
 
-        class Firework {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = canvas.height;
-                this.sx = Math.random() * 3 - 1.5;
-                this.sy = Math.random() * -3 - 3;
-                this.size = Math.random() * 2 + 1;
-                this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                this.exploded = false;
-                this.particles = [];
-            }
+        // Phát nhạc khi chạm
+        document.addEventListener('click', () => {
+            document.getElementById('bgMusic').play();
+            document.querySelector('.music-hint').style.display = 'none';
+        }, {once: true});
 
-            update() {
-                if (!this.exploded) {
-                    this.x += this.sx;
-                    this.y += this.sy;
-                    this.sy += 0.05;
-                    if (this.sy >= -1) this.explode();
-                } else {
-                    this.particles.forEach((p, i) => {
-                        p.x += p.vx;
-                        p.y += p.vy;
-                        p.vy += 0.05;
-                        p.alpha -= 0.01;
-                        if (p.alpha <= 0) this.particles.splice(i, 1);
-                    });
-                }
-            }
-
-            explode() {
-                this.exploded = true;
-                for (let i = 0; i < 50; i++) {
-                    this.particles.push({
-                        x: this.x,
-                        y: this.y,
-                        vx: Math.random() * 6 - 3,
-                        vy: Math.random() * 6 - 3,
-                        alpha: 1
-                    });
-                }
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 8,
+                    y: (Math.random() - 0.5) * 8
+                };
+                this.alpha = 1;
+                this.friction = 0.95;
             }
 
             draw() {
-                if (!this.exploded) {
-                    ctx.fillStyle = this.color;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                } else {
-                    this.particles.forEach(p => {
-                        ctx.fillStyle = `rgba(255, 215, 0, ${p.alpha})`; // Màu vàng gold cho hạt
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, this.size, 0, Math.PI * 2);
-                        ctx.fill();
-                    });
-                }
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.velocity.y += 0.1;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.01;
             }
         }
 
-        let fireworks = [];
+        function createFirework() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height * 0.5;
+            const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
         function animate() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            if (Math.random() < 0.05) fireworks.push(new Firework());
-            
-            fireworks.forEach((fw, i) => {
-                fw.update();
-                fw.draw();
-                if (fw.exploded && fw.particles.length === 0) fireworks.splice(i, 1);
+
+            if (Math.random() < 0.05) createFirework();
+
+            particles.forEach((particle, index) => {
+                if (particle.alpha > 0) {
+                    particle.update();
+                    particle.draw();
+                } else {
+                    particles.splice(index, 1);
+                }
             });
+
             requestAnimationFrame(animate);
         }
 
