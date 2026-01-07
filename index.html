@@ -14,7 +14,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh; /* Sử dụng min-height để tránh lỗi trên mobile */
+            flex-direction: column;
         }
 
         canvas {
@@ -35,11 +36,24 @@
             box-shadow: 0 0 20px #ffd700;
             backdrop-filter: blur(5px);
             max-width: 80%;
+            /* Thêm margin để không bị sát viền trên mobile khi xoay ngang */
+            margin: 20px;
             animation: fadeIn 2s ease-in-out;
+        }
+        
+        /* CSS cho ảnh đại diện */
+        .recipient-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%; /* Bo tròn ảnh */
+            object-fit: cover; /* Đảm bảo ảnh không bị méo */
+            border: 3px solid #ffd700; /* Viền vàng */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            margin-bottom: 15px;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 2.5rem; /* Giảm một chút cho cân đối với ảnh */
             margin: 0;
             background: linear-gradient(to right, #ffd700, #fff, #ffd700);
             -webkit-background-clip: text;
@@ -48,9 +62,9 @@
         }
 
         p {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: #f0f0f0;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .wishes {
@@ -58,31 +72,69 @@
             color: #ff4d4d;
             font-weight: bold;
         }
+        
+        .music-hint {
+            position: relative;
+            z-index: 10;
+            color: #888;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            animation: blink 2s infinite;
+        }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.8); }
             to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes blink {
+            50% { opacity: 0.5; }
         }
 
         /* Responsive cho điện thoại */
         @media (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             p { font-size: 1rem; }
+            .recipient-img { width: 100px; height: 100px; }
         }
     </style>
 </head>
 <body>
 
     <canvas id="fireworks"></canvas>
+    
+    <audio id="bgMusic" loop hidden>
+        <source src="nhac-nen-tet.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ phát nhạc.
+    </audio>
 
     <div class="card">
+        <img src="514203164_1455314202299653_5112948098522370396_n.jpg" alt="Người nhận" class="recipient-img">
+
         <h1>HAPPY NEW YEAR 2026</h1>
         <p>Chúc mừng năm mới!</p>
         <p class="wishes">"Vạn sự như ý - Tỷ sự như mơ <br> Triệu triệu bất ngờ - Không chờ cũng đến"</p>
-        <p style="font-size: 0.9rem; color: #ffd700;">— Từ Võ Tấn Phát dz s1tg —</p>
+        <p style="font-size: 0.9rem; color: #ffd700;">— Từ Võ Tấn Phát dzai s1tg —</p>
     </div>
+    
+    <p class="music-hint">(Chạm bất kỳ đâu trên màn hình để phát nhạc 🎵)</p>
 
     <script>
+        // ---- Phần Javascript xử lý phát nhạc ----
+        document.addEventListener('click', function() {
+            const audio = document.getElementById('bgMusic');
+            // Kiểm tra nếu nhạc chưa phát thì mới phát
+            if (audio.paused) {
+                audio.play().then(() => {
+                    // Ẩn dòng gợi ý sau khi nhạc đã phát
+                    document.querySelector('.music-hint').style.display = 'none';
+                }).catch(error => {
+                    console.log("Không thể tự động phát nhạc: " + error);
+                });
+            }
+        }, { once: true }); // Chỉ chạy sự kiện click này 1 lần duy nhất
+
+
+        // ---- Phần Javascript xử lý pháo hoa (Giữ nguyên) ----
         const canvas = document.getElementById('fireworks');
         const ctx = canvas.getContext('2d');
 
@@ -144,17 +196,12 @@
                     ctx.fill();
                 } else {
                     this.particles.forEach(p => {
-                        ctx.fillStyle = `rgba(${this.hexToRgb(this.color)}, ${p.alpha})`;
+                        ctx.fillStyle = `rgba(255, 215, 0, ${p.alpha})`; // Màu vàng gold cho hạt
                         ctx.beginPath();
                         ctx.arc(p.x, p.y, this.size, 0, Math.PI * 2);
                         ctx.fill();
                     });
                 }
-            }
-
-            hexToRgb(hsl) {
-                // Đơn giản hóa để lấy màu cho hạt pháo
-                return "255, 215, 0"; 
             }
         }
 
